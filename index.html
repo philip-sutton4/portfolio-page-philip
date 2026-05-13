@@ -1,17 +1,1209 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
   <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>My Website</title>
-    <link rel="stylesheet" href="./style.css">
-    <link rel="icon" href="./favicon.ico" type="image/x-icon">
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Philip Sutton — DevOps Engineer</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,300&family=DM+Serif+Display:ital@0;1&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      *,
+      *::before,
+      *::after {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+
+      :root {
+        --bg: #f7f6f3;
+        --surface: #ffffff;
+        --surface2: #f0ede8;
+        --text: #1a1917;
+        --text-secondary: #6b6760;
+        --text-tertiary: #9c9890;
+        --accent: #1a56a0;
+        --accent-light: #e8f0fb;
+        --accent-mid: #4580c8;
+        --border: rgba(26, 25, 23, 0.1);
+        --border-strong: rgba(26, 25, 23, 0.18);
+        --tag-bg: #edeae4;
+        --tag-text: #4a4844;
+        --green: #2d6a4f;
+        --green-bg: #e8f5ef;
+        --amber: #7a4f10;
+        --amber-bg: #fdf3e3;
+        --radius: 12px;
+        --radius-sm: 8px;
+      }
+
+      html {
+        scroll-behavior: smooth;
+      }
+
+      body {
+        font-family: "DM Sans", sans-serif;
+        background: var(--bg);
+        color: var(--text);
+        font-size: 16px;
+        line-height: 1.7;
+        -webkit-font-smoothing: antialiased;
+      }
+
+      /* NAV */
+      nav {
+        position: sticky;
+        top: 0;
+        z-index: 100;
+        background: rgba(247, 246, 243, 0.92);
+        backdrop-filter: blur(12px);
+        border-bottom: 0.5px solid var(--border);
+        padding: 0 2rem;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        height: 60px;
+      }
+      .nav-logo {
+        font-family: "DM Serif Display", serif;
+        font-size: 18px;
+        color: var(--text);
+        text-decoration: none;
+        letter-spacing: -0.3px;
+      }
+      .nav-links {
+        display: flex;
+        gap: 2rem;
+        list-style: none;
+      }
+      .nav-links a {
+        font-size: 14px;
+        font-weight: 400;
+        color: var(--text-secondary);
+        text-decoration: none;
+        transition: color 0.2s;
+      }
+      .nav-links a:hover {
+        color: var(--text);
+      }
+
+      /* LAYOUT */
+      .container {
+        max-width: 900px;
+        margin: 0 auto;
+        padding: 0 2rem;
+      }
+      section {
+        padding: 5rem 0;
+      }
+      section + section {
+        border-top: 0.5px solid var(--border);
+      }
+
+      /* HERO */
+      .hero {
+        padding: 6rem 0 5rem;
+        display: grid;
+        grid-template-columns: 1fr auto;
+        gap: 3rem;
+        align-items: center;
+      }
+      .hero-eyebrow {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        font-size: 13px;
+        font-weight: 400;
+        color: var(--accent);
+        letter-spacing: 0.05em;
+        text-transform: uppercase;
+        margin-bottom: 1.25rem;
+      }
+      .hero-eyebrow span {
+        display: inline-block;
+        width: 6px;
+        height: 6px;
+        border-radius: 50%;
+        background: var(--accent);
+        animation: pulse 2s infinite;
+      }
+      @keyframes pulse {
+        0%,
+        100% {
+          opacity: 1;
+          transform: scale(1);
+        }
+        50% {
+          opacity: 0.5;
+          transform: scale(0.8);
+        }
+      }
+      .hero h1 {
+        font-family: "DM Serif Display", serif;
+        font-size: clamp(2.6rem, 5vw, 3.6rem);
+        line-height: 1.1;
+        letter-spacing: -1px;
+        color: var(--text);
+        margin-bottom: 1.25rem;
+      }
+      .hero h1 em {
+        font-style: italic;
+        color: var(--accent);
+      }
+      .hero-bio {
+        font-size: 17px;
+        color: var(--text-secondary);
+        max-width: 520px;
+        line-height: 1.65;
+        margin-bottom: 2rem;
+      }
+      .hero-actions {
+        display: flex;
+        align-items: center;
+        gap: 1.25rem;
+        flex-wrap: wrap;
+      }
+      .btn-primary {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        background: var(--text);
+        color: #fff;
+        padding: 10px 22px;
+        border-radius: var(--radius-sm);
+        text-decoration: none;
+        font-size: 14px;
+        font-weight: 500;
+        transition:
+          opacity 0.2s,
+          transform 0.15s;
+      }
+      .btn-primary:hover {
+        opacity: 0.85;
+        transform: translateY(-1px);
+      }
+      .btn-outline {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        background: transparent;
+        border: 0.5px solid var(--border-strong);
+        color: var(--text);
+        padding: 10px 22px;
+        border-radius: var(--radius-sm);
+        text-decoration: none;
+        font-size: 14px;
+        font-weight: 400;
+        transition:
+          background 0.2s,
+          transform 0.15s;
+      }
+      .btn-outline:hover {
+        background: var(--surface2);
+        transform: translateY(-1px);
+      }
+
+      .social-links {
+        display: flex;
+        gap: 12px;
+        margin-top: 0.25rem;
+      }
+      .social-link {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 38px;
+        height: 38px;
+        border: 0.5px solid var(--border-strong);
+        border-radius: var(--radius-sm);
+        color: var(--text-secondary);
+        text-decoration: none;
+        transition:
+          color 0.2s,
+          border-color 0.2s,
+          background 0.2s;
+        margin-top: 20px;
+      }
+      .social-link:hover {
+        color: var(--text);
+        background: var(--surface);
+        border-color: var(--border-strong);
+      }
+      .social-link svg {
+        width: 18px;
+        height: 18px;
+        fill: none;
+        stroke: currentColor;
+        stroke-width: 1.8;
+        stroke-linecap: round;
+        stroke-linejoin: round;
+      }
+
+      .hero-avatar {
+        width: 140px;
+        height: 140px;
+        border-radius: 50%;
+        background: linear-gradient(
+          135deg,
+          var(--accent-light) 0%,
+          #d6e8ff 100%
+        );
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-family: "DM Serif Display", serif;
+        font-size: 3rem;
+        color: var(--accent);
+        flex-shrink: 0;
+        border: 3px solid var(--surface);
+        box-shadow: 0 0 0 1px var(--border);
+      }
+
+      .hero-avatar img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        border-radius: 50%;
+        object-position: 0px -10px;
+      }
+
+      /* SECTION HEADERS */
+      .section-label {
+        font-size: 12px;
+        font-weight: 500;
+        letter-spacing: 0.1em;
+        text-transform: uppercase;
+        color: var(--text-tertiary);
+        margin-bottom: 0.75rem;
+      }
+      .section-title {
+        font-family: "DM Serif Display", serif;
+        font-size: clamp(1.6rem, 3vw, 2.1rem);
+        line-height: 1.2;
+        letter-spacing: -0.5px;
+        margin-bottom: 0.5rem;
+      }
+      .section-subtitle {
+        color: var(--text-secondary);
+        font-size: 16px;
+        margin-bottom: 3rem;
+        max-width: 480px;
+      }
+
+      /* PROJECT CARDS */
+      .projects-grid {
+        display: grid;
+        gap: 1.5rem;
+      }
+      .project-card {
+        background: var(--surface);
+        border: 0.5px solid var(--border);
+        border-radius: var(--radius);
+        padding: 2rem 2rem 1.75rem;
+        transition:
+          transform 0.2s,
+          box-shadow 0.2s;
+        position: relative;
+        overflow: hidden;
+      }
+      .project-card::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 3px;
+        background: var(--accent);
+        opacity: 0;
+        transition: opacity 0.2s;
+      }
+      .project-card:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 8px 32px rgba(26, 25, 23, 0.08);
+      }
+      .project-card:hover::before {
+        opacity: 1;
+      }
+      .project-card.wip {
+        background: var(--surface);
+        border-style: dashed;
+      }
+      .project-card.wip::before {
+        background: var(--amber);
+      }
+
+      .card-header {
+        display: flex;
+        align-items: flex-start;
+        justify-content: space-between;
+        gap: 1rem;
+        margin-bottom: 1rem;
+      }
+      .card-badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 5px;
+        font-size: 11.5px;
+        font-weight: 500;
+        padding: 4px 10px;
+        border-radius: 20px;
+        white-space: nowrap;
+        flex-shrink: 0;
+      }
+      .badge-done {
+        background: var(--green-bg);
+        color: var(--green);
+      }
+      .badge-wip {
+        background: var(--amber-bg);
+        color: var(--amber);
+      }
+      .badge-dot {
+        width: 5px;
+        height: 5px;
+        border-radius: 50%;
+        background: currentColor;
+      }
+      .badge-wip .badge-dot {
+        animation: pulse 1.5s infinite;
+      }
+
+      .project-title {
+        font-family: "DM Serif Display", serif;
+        font-size: 1.3rem;
+        line-height: 1.3;
+        letter-spacing: -0.3px;
+        margin-bottom: 0.6rem;
+        flex: 1;
+      }
+      .project-desc {
+        color: var(--text-secondary);
+        font-size: 15px;
+        line-height: 1.65;
+        margin-bottom: 1.5rem;
+      }
+      .tech-stack {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+        margin-bottom: 1.5rem;
+      }
+      .tech-tag {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        background: var(--tag-bg);
+        color: var(--tag-text);
+        font-size: 12.5px;
+        font-weight: 500;
+        padding: 4px 10px;
+        border-radius: 6px;
+      }
+      .tech-tag img {
+        width: 14px;
+        height: 14px;
+        object-fit: contain;
+      }
+      .card-footer {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding-top: 1.25rem;
+        border-top: 0.5px solid var(--border);
+        gap: 1rem;
+        flex-wrap: wrap;
+      }
+      .card-meta {
+        font-size: 13px;
+        color: var(--text-tertiary);
+        display: flex;
+        align-items: center;
+        gap: 6px;
+      }
+      .card-link {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        font-size: 13.5px;
+        font-weight: 500;
+        color: var(--accent);
+        text-decoration: none;
+        transition: gap 0.2s;
+      }
+      .card-link:hover {
+        gap: 9px;
+      }
+      .card-link svg {
+        width: 14px;
+        height: 14px;
+        stroke: currentColor;
+        fill: none;
+        stroke-width: 2;
+        stroke-linecap: round;
+        stroke-linejoin: round;
+      }
+
+      /* SKILLS */
+      .skills-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+        gap: 1rem;
+      }
+      .skill-group {
+        background: var(--surface);
+        border: 0.5px solid var(--border);
+        border-radius: var(--radius);
+        padding: 1.4rem 1.5rem;
+      }
+      .skill-group-title {
+        font-size: 12px;
+        font-weight: 500;
+        text-transform: uppercase;
+        letter-spacing: 0.08em;
+        color: var(--text-tertiary);
+        margin-bottom: 0.85rem;
+      }
+      .skill-pills {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 7px;
+      }
+      .skill-pill {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        font-size: 13px;
+        background: var(--tag-bg);
+        color: var(--tag-text);
+        padding: 5px 11px;
+        border-radius: 6px;
+        font-weight: 400;
+      }
+      .skill-pill img {
+        width: 14px;
+        height: 14px;
+        object-fit: contain;
+      }
+
+      /* EXPERIENCE & EDUCATION */
+      .timeline {
+        display: flex;
+        flex-direction: column;
+        gap: 0;
+      }
+      .timeline-item {
+        display: grid;
+        grid-template-columns: 160px 1fr;
+        gap: 2rem;
+        padding: 1.75rem 0;
+        border-bottom: 0.5px solid var(--border);
+        position: relative;
+      }
+      .timeline-item:last-child {
+        border-bottom: none;
+      }
+      .timeline-date {
+        font-size: 13px;
+        color: var(--text-tertiary);
+        padding-top: 3px;
+        line-height: 1.4;
+      }
+      .timeline-date strong {
+        display: block;
+        font-weight: 500;
+        color: var(--text-secondary);
+        font-size: 13px;
+        margin-bottom: 2px;
+      }
+      .timeline-body {
+      }
+      .timeline-title {
+        font-size: 16px;
+        font-weight: 500;
+        margin-bottom: 3px;
+        line-height: 1.4;
+      }
+      .timeline-org {
+        font-size: 14px;
+        color: var(--accent);
+        margin-bottom: 0.5rem;
+        font-weight: 400;
+      }
+      .timeline-desc {
+        font-size: 14px;
+        color: var(--text-secondary);
+        line-height: 1.6;
+      }
+
+      /* CONTACT */
+      .contact-grid {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 1rem;
+      }
+      .contact-card {
+        background: var(--surface);
+        border: 0.5px solid var(--border);
+        border-radius: var(--radius);
+        padding: 1.5rem;
+        text-decoration: none;
+        color: var(--text);
+        display: flex;
+        flex-direction: column;
+        gap: 0.5rem;
+        transition:
+          transform 0.2s,
+          box-shadow 0.2s;
+      }
+      .contact-card:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 8px 24px rgba(26, 25, 23, 0.07);
+      }
+      .contact-icon {
+        width: 40px;
+        height: 40px;
+        background: var(--accent-light);
+        border-radius: var(--radius-sm);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-bottom: 0.5rem;
+      }
+      .contact-icon svg {
+        width: 20px;
+        height: 20px;
+        stroke: var(--accent);
+        fill: none;
+        stroke-width: 1.8;
+        stroke-linecap: round;
+        stroke-linejoin: round;
+      }
+      .contact-label {
+        font-size: 12px;
+        font-weight: 500;
+        text-transform: uppercase;
+        letter-spacing: 0.08em;
+        color: var(--text-tertiary);
+      }
+      .contact-value {
+        font-size: 14px;
+        color: var(--text);
+        word-break: break-all;
+      }
+
+      /* FOOTER */
+      footer {
+        border-top: 0.5px solid var(--border);
+        padding: 2rem;
+        text-align: center;
+        color: var(--text-tertiary);
+        font-size: 13px;
+      }
+
+      /* ANIMATIONS */
+      @keyframes fadeUp {
+        from {
+          opacity: 0;
+          transform: translateY(20px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+      .fade-up {
+        animation: fadeUp 0.6s ease forwards;
+      }
+      .fade-up-1 {
+        animation-delay: 0.1s;
+        opacity: 0;
+      }
+      .fade-up-2 {
+        animation-delay: 0.2s;
+        opacity: 0;
+      }
+      .fade-up-3 {
+        animation-delay: 0.3s;
+        opacity: 0;
+      }
+      .fade-up-4 {
+        animation-delay: 0.4s;
+        opacity: 0;
+      }
+
+      /* RESPONSIVE */
+      @media (max-width: 680px) {
+        .hero {
+          grid-template-columns: 1fr;
+        }
+        .hero-avatar {
+          display: none;
+        }
+        .contact-grid {
+          grid-template-columns: 1fr;
+        }
+        .timeline-item {
+          grid-template-columns: 1fr;
+          gap: 0.5rem;
+        }
+        .timeline-date {
+          order: 2;
+        }
+        .timeline-body {
+          order: 1;
+        }
+        nav {
+          padding: 0 1rem;
+        }
+        .nav-links {
+          gap: 1rem;
+        }
+        .container {
+          padding: 0 1.25rem;
+        }
+        section {
+          padding: 3.5rem 0;
+        }
+      }
+    </style>
   </head>
   <body>
+    <nav>
+      <a href="#" class="nav-logo">Philip Sutton</a>
+      <ul class="nav-links">
+        <li><a href="#projects">Projects</a></li>
+        <li><a href="#skills">Skills</a></li>
+        <li><a href="#experience">Experience</a></li>
+        <li><a href="#contact">Contact</a></li>
+      </ul>
+    </nav>
+
     <main>
-        <h1>Welcome to My Website</h1>  
+      <div class="container">
+        <!-- HERO -->
+        <div class="hero">
+          <div>
+            <div class="hero-eyebrow fade-up fade-up-1">
+              <!--<span></span>
+          Available for new opportunities-->
+            </div>
+            <h1 class="fade-up fade-up-1">DevOps<br /><em>Engineer</em></h1>
+            <p class="hero-bio fade-up fade-up-2">
+              I specialise in CI/CD pipelines, cloud infrastructure, and
+              monitoring &amp; observability — helping teams ship faster and
+              operate with confidence. Based in Warsaw, Poland.
+            </p>
+            <div class="hero-actions fade-up fade-up-3">
+              <a href="#projects" class="btn-primary">
+                View projects
+                <svg
+                  viewBox="0 0 24 24"
+                  width="14"
+                  height="14"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2.5"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                >
+                  <path d="M5 12h14M12 5l7 7-7 7" />
+                </svg>
+              </a>
+              <a href="mailto:philip@sutton.pl" class="btn-outline"
+                >Get in touch</a
+              >
+            </div>
+            <div class="social-links fade-up fade-up-4">
+              <!-- LinkedIn -->
+              <a
+                href="https://www.linkedin.com/in/philip-sutton-13444a25b/"
+                class="social-link"
+                target="_blank"
+                rel="noopener"
+                title="LinkedIn"
+              >
+                <svg viewBox="0 0 24 24">
+                  <path
+                    d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"
+                  />
+                  <rect x="2" y="9" width="4" height="12" />
+                  <circle cx="4" cy="4" r="2" />
+                </svg>
+              </a>
+              <!-- GitHub -->
+              <a
+                href="https://github.com/philip-sutton4"
+                class="social-link"
+                target="_blank"
+                rel="noopener"
+                title="GitHub"
+              >
+                <svg viewBox="0 0 24 24">
+                  <path
+                    d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"
+                  />
+                </svg>
+              </a>
+              <!-- Email -->
+              <a
+                href="mailto:philip@sutton.pl"
+                class="social-link"
+                title="Email"
+              >
+                <svg viewBox="0 0 24 24">
+                  <path
+                    d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"
+                  />
+                  <polyline points="22,6 12,13 2,6" />
+                </svg>
+              </a>
+            </div>
+          </div>
+          <div class="hero-avatar" aria-hidden="true" img>
+            <img
+              src="https://drive.google.com/thumbnail?id=1Su9_TG6QTNzsS0XqQIFCFW4aYlnMJAl5"
+              alt="Philip Sutton"
+            />
+          </div>
+        </div>
+      </div>
+
+      <!-- PROJECTS -->
+      <section id="projects">
+        <div class="container">
+          <p class="section-label">Work</p>
+          <h2 class="section-title">Projects</h2>
+          <p class="section-subtitle">
+            End-to-end solutions designed for reliability, developer experience,
+            and cost efficiency.
+          </p>
+
+          <div class="projects-grid">
+            <!-- Project 1 -->
+            <div class="project-card">
+              <div class="card-header">
+                <h3 class="project-title">
+                  Ephemeral PR Preview Environment Platform
+                </h3>
+                <span class="card-badge badge-done">
+                  <span class="badge-dot"></span>
+                  Completed
+                </span>
+              </div>
+              <p class="project-desc">
+                A Kubernetes-based CI/CD platform on Azure Kubernetes Service
+                (AKS) that spins up fully isolated, per-branch preview
+                environments for every pull request — automatically torn down
+                after merge. Infrastructure is provisioned via Bicep, pipelines
+                managed through Azure DevOps, and Helm handles per-namespace
+                deployments. Scheduled cluster start/stop cuts idle costs
+                significantly.
+              </p>
+              <div class="tech-stack">
+                <span class="tech-tag">
+                  <img
+                    src="https://img.icons8.com/?size=100&id=lWL5zqQfa1pO&format=png&color=000000"
+                    alt=""
+                  />
+                  Azure DevOps
+                </span>
+                <span class="tech-tag">
+                  <img
+                    src="https://img.icons8.com/?size=100&id=lWL5zqQfa1pO&format=png&color=000000"
+                    alt=""
+                  />
+                  AKS
+                </span>
+                <span class="tech-tag">
+                  <img src="https://cdn.simpleicons.org/helm/0f1689" alt="" />
+                  Helm
+                </span>
+                <span class="tech-tag">
+                  <img
+                    src="https://cdn.simpleicons.org/nodedotjs/339933"
+                    alt=""
+                  />
+                  Node.js
+                </span>
+                <span class="tech-tag">
+                  <img
+                    src="https://cdn.simpleicons.org/vuedotjs/42b883"
+                    alt=""
+                  />
+                  Vue
+                </span>
+                <span class="tech-tag">
+                  <svg
+                    width="14"
+                    height="14"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="#0078d4"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                  >
+                    <path
+                      d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"
+                    />
+                  </svg>
+                  Bicep
+                </span>
+              </div>
+              <div class="card-footer">
+                <span class="card-meta">
+                  <svg
+                    width="14"
+                    height="14"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="1.8"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                  >
+                    <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
+                    <circle cx="12" cy="7" r="4" />
+                  </svg>
+                  Solo project · Full ownership
+                </span>
+                <a href="project-aks-preview.html" class="card-link">
+                  Read documentation
+                  <svg viewBox="0 0 24 24">
+                    <path d="M5 12h14M12 5l7 7-7 7" />
+                  </svg>
+                </a>
+              </div>
+            </div>
+
+            <!-- Project 2 WIP -->
+            <div class="project-card wip">
+              <div class="card-header">
+                <h3 class="project-title">
+                  Grafana Observability Stack on Kubernetes
+                </h3>
+                <span class="card-badge badge-wip">
+                  <span class="badge-dot"></span>
+                  In progress
+                </span>
+              </div>
+              <p class="project-desc">
+                A full-stack observability platform deployed inside a Kubernetes
+                cluster, integrating Grafana for dashboards, OpenTelemetry for
+                instrumentation, Loki for log aggregation, and Tempo for
+                distributed tracing — giving teams end-to-end visibility across
+                services. Currently in active development.
+              </p>
+              <div class="tech-stack">
+                <span class="tech-tag">
+                  <img
+                    src="https://cdn.simpleicons.org/grafana/f46800"
+                    alt=""
+                  />
+                  Grafana
+                </span>
+                <span class="tech-tag">
+                  <img
+                    src="https://cdn.simpleicons.org/opentelemetry/425cc7"
+                    alt=""
+                  />
+                  OpenTelemetry
+                </span>
+                <span class="tech-tag">
+                  <img
+                    src="https://cdn.simpleicons.org/kubernetes/326ce5"
+                    alt=""
+                  />
+                  Kubernetes
+                </span>
+                <span class="tech-tag">
+                  <img
+                    src="https://cdn.simpleicons.org/grafana/f46800"
+                    alt=""
+                  />
+                  Loki
+                </span>
+                <span class="tech-tag">
+                  <img
+                    src="https://cdn.simpleicons.org/grafana/f46800"
+                    alt=""
+                  />
+                  Tempo
+                </span>
+              </div>
+              <div class="card-footer">
+                <span class="card-meta">
+                  <svg
+                    width="14"
+                    height="14"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="1.8"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                  >
+                    <circle cx="12" cy="12" r="10" />
+                    <polyline points="12 6 12 12 16 14" />
+                  </svg>
+                  Documentation coming soon
+                </span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- SKILLS -->
+      <section id="skills">
+        <div class="container">
+          <p class="section-label">Expertise</p>
+          <h2 class="section-title">Skills &amp; Tools</h2>
+          <p class="section-subtitle">
+            The technologies I work with day to day.
+          </p>
+
+          <div class="skills-grid">
+            <div class="skill-group">
+              <p class="skill-group-title">Cloud &amp; Infrastructure</p>
+              <div class="skill-pills">
+                <span class="skill-pill">
+                  <img
+                    src="https://img.icons8.com/?size=100&id=81727&format=png&color=000000"
+                    alt=""
+                  />
+                  Azure Cloud
+                </span>
+                <span class="skill-pill">
+                  <img
+                    src="https://cdn.simpleicons.org/kubernetes/326ce5"
+                    alt=""
+                  />
+                  Kubernetes
+                </span>
+                <span class="skill-pill">
+                  <img src="https://cdn.simpleicons.org/helm/0f1689" alt="" />
+                  Helm
+                </span>
+                <span class="skill-pill">
+                  <img src="https://cdn.simpleicons.org/docker/2496ed" alt="" />
+                  Docker
+                </span>
+              </div>
+            </div>
+            <div class="skill-group">
+              <p class="skill-group-title">CI/CD &amp; Pipelines</p>
+              <div class="skill-pills">
+                <span class="skill-pill">
+                  <img
+                    src="https://img.icons8.com/?size=100&id=lWL5zqQfa1pO&format=png&color=000000"
+                    alt=""
+                  />
+                  Azure DevOps
+                </span>
+                <span class="skill-pill">
+                  <svg
+                    width="14"
+                    height="14"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="#0078d4"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                  >
+                    <path
+                      d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"
+                    />
+                  </svg>
+                  Bicep / IaC
+                </span>
+              </div>
+            </div>
+            <div class="skill-group">
+              <p class="skill-group-title">Monitoring &amp; Observability</p>
+              <div class="skill-pills">
+                <span class="skill-pill">
+                  <img
+                    src="https://cdn.simpleicons.org/grafana/f46800"
+                    alt=""
+                  />
+                  Grafana
+                </span>
+                <span class="skill-pill">
+                  <img
+                    src="https://cdn.simpleicons.org/opentelemetry/425cc7"
+                    alt=""
+                  />
+                  OpenTelemetry
+                </span>
+                <span class="skill-pill">
+                  <img
+                    src="https://cdn.simpleicons.org/prometheus/e6522c"
+                    alt=""
+                  />
+                  Prometheus
+                </span>
+                <span class="skill-pill">
+                  <img
+                    src="https://cdn.simpleicons.org/grafana/f46800"
+                    alt=""
+                  />
+                  Loki
+                </span>
+                <span class="skill-pill">
+                  <img
+                    src="https://cdn.simpleicons.org/grafana/f46800"
+                    alt=""
+                  />
+                  Tempo
+                </span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- EXPERIENCE & EDUCATION -->
+      <section id="experience">
+        <div class="container">
+          <p class="section-label">Background</p>
+          <h2 class="section-title">Experience &amp; Education</h2>
+          <p class="section-subtitle">
+            Where I've worked and what I've studied.
+          </p>
+
+          <div class="timeline">
+            <div class="timeline-item">
+              <div class="timeline-date">
+                <strong>2022 — Present</strong>
+                Warsaw, Poland
+              </div>
+              <div class="timeline-body">
+                <p class="timeline-title">DevOps Engineer</p>
+                <p class="timeline-org">Bosch Poland</p>
+                <p class="timeline-desc">
+                  Designing and maintaining CI/CD infrastructure, cloud
+                  environments on Azure, and observability solutions for
+                  development teams across the organisation.
+                </p>
+              </div>
+            </div>
+            <div class="timeline-item">
+              <div class="timeline-date">
+                <strong>Master's &amp; Engineer's degree</strong>
+                Warsaw
+              </div>
+              <div class="timeline-body">
+                <p class="timeline-title">IT System Architecture</p>
+                <p class="timeline-org">
+                  Polish-Japanese Academy of Computer Science
+                </p>
+                <p class="timeline-desc">
+                  Majored in IT System Architecture, building a strong
+                  foundation in system design, distributed computing, and
+                  software engineering principles.
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- CONTACT -->
+      <section id="contact">
+        <div class="container">
+          <p class="section-label">Get in touch</p>
+          <h2 class="section-title">Contact</h2>
+          <p class="section-subtitle">
+            Open to interesting projects, collaborations, or just a conversation
+            about DevOps.
+          </p>
+
+          <div class="contact-grid">
+            <a href="mailto:philip@sutton.pl" class="contact-card">
+              <div class="contact-icon">
+                <svg viewBox="0 0 24 24">
+                  <path
+                    d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"
+                  />
+                  <polyline points="22,6 12,13 2,6" />
+                </svg>
+              </div>
+              <span class="contact-label">Email</span>
+              <span class="contact-value">philip@sutton.pl</span>
+            </a>
+            <a
+              href="https://www.linkedin.com/in/philip-sutton-13444a25b/"
+              target="_blank"
+              rel="noopener"
+              class="contact-card"
+            >
+              <div class="contact-icon">
+                <svg viewBox="0 0 24 24">
+                  <path
+                    d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"
+                  />
+                  <rect x="2" y="9" width="4" height="12" />
+                  <circle cx="4" cy="4" r="2" />
+                </svg>
+              </div>
+              <span class="contact-label">LinkedIn</span>
+              <span class="contact-value">philip-sutton-13444a25b</span>
+            </a>
+            <a
+              href="https://github.com/philip-sutton4"
+              target="_blank"
+              rel="noopener"
+              class="contact-card"
+            >
+              <div class="contact-icon">
+                <svg viewBox="0 0 24 24">
+                  <path
+                    d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"
+                  />
+                </svg>
+              </div>
+              <span class="contact-label">GitHub</span>
+              <span class="contact-value">philip-sutton4</span>
+            </a>
+          </div>
+        </div>
+      </section>
     </main>
-    <script src="index.js"></script>
+
+    <footer>
+      <p>© 2025 Philip Sutton · Warsaw, Poland</p>
+    </footer>
+
+    <script>
+      const observer = new IntersectionObserver(
+        (entries) => {
+          entries.forEach((entry) => {
+            if (entry.isIntersecting) {
+              entry.target.style.opacity = "1";
+              entry.target.style.transform = "translateY(0)";
+              entry.target.style.transition =
+                "opacity 0.5s ease, transform 0.5s ease";
+            }
+          });
+        },
+        { threshold: 0.1 },
+      );
+
+      document
+        .querySelectorAll(
+          ".project-card, .skill-group, .timeline-item, .contact-card",
+        )
+        .forEach((el) => {
+          el.style.opacity = "0";
+          el.style.transform = "translateY(16px)";
+          observer.observe(el);
+        });
+    </script>
   </body>
 </html>
