@@ -1,0 +1,1594 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Ephemeral PR Preview Platform — Philip Sutton</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,300&family=DM+Serif+Display:ital@0;1&family=DM+Mono:wght@400;500&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      *,
+      *::before,
+      *::after {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+      :root {
+        --bg: #f7f6f3;
+        --surface: #ffffff;
+        --surface2: #f0ede8;
+        --text: #1a1917;
+        --text-secondary: #6b6760;
+        --text-tertiary: #9c9890;
+        --accent: #1a56a0;
+        --accent-light: #e8f0fb;
+        --accent-mid: #4580c8;
+        --border: rgba(26, 25, 23, 0.1);
+        --border-strong: rgba(26, 25, 23, 0.18);
+        --tag-bg: #edeae4;
+        --tag-text: #4a4844;
+        --green: #2d6a4f;
+        --green-bg: #e8f5ef;
+        --amber: #7a4f10;
+        --amber-bg: #fdf3e3;
+        --red: #922;
+        --red-bg: #fdf0f0;
+        --code-bg: #1e1e2e;
+        --code-text: #cdd6f4;
+        --code-green: #a6e3a1;
+        --code-blue: #89b4fa;
+        --code-yellow: #f9e2af;
+        --radius: 12px;
+        --radius-sm: 8px;
+      }
+      html {
+        scroll-behavior: smooth;
+      }
+      body {
+        font-family: "DM Sans", sans-serif;
+        background: var(--bg);
+        color: var(--text);
+        font-size: 16px;
+        line-height: 1.7;
+        -webkit-font-smoothing: antialiased;
+      }
+
+      /* NAV */
+      nav {
+        position: sticky;
+        top: 0;
+        z-index: 100;
+        background: rgba(247, 246, 243, 0.92);
+        backdrop-filter: blur(12px);
+        border-bottom: 0.5px solid var(--border);
+        padding: 0 2rem;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        height: 60px;
+      }
+      .nav-back {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        font-size: 14px;
+        color: var(--text-secondary);
+        text-decoration: none;
+        transition: color 0.2s;
+      }
+      .nav-back:hover {
+        color: var(--text);
+      }
+      .nav-back svg {
+        width: 16px;
+        height: 16px;
+        stroke: currentColor;
+        fill: none;
+        stroke-width: 2;
+        stroke-linecap: round;
+        stroke-linejoin: round;
+      }
+      .nav-title {
+        font-size: 14px;
+        color: var(--text-tertiary);
+      }
+      .nav-right {
+        display: flex;
+        gap: 12px;
+      }
+      .nav-repo-link {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        font-size: 13px;
+        color: var(--text-secondary);
+        text-decoration: none;
+        border: 0.5px solid var(--border-strong);
+        padding: 5px 12px;
+        border-radius: var(--radius-sm);
+        transition:
+          background 0.2s,
+          color 0.2s;
+      }
+      .nav-repo-link:hover {
+        background: var(--surface);
+        color: var(--text);
+      }
+      .nav-repo-link svg {
+        width: 14px;
+        height: 14px;
+        stroke: currentColor;
+        fill: none;
+        stroke-width: 1.8;
+        stroke-linecap: round;
+        stroke-linejoin: round;
+      }
+
+      /* LAYOUT */
+      .page {
+        max-width: 860px;
+        margin: 0 auto;
+        padding: 0 2rem 6rem;
+      }
+
+      /* HERO */
+      .hero {
+        padding: 4rem 0 3.5rem;
+        border-bottom: 0.5px solid var(--border);
+        margin-bottom: 3rem;
+      }
+      .hero-meta {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        margin-bottom: 1.25rem;
+        flex-wrap: wrap;
+      }
+      .badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 5px;
+        font-size: 11.5px;
+        font-weight: 500;
+        padding: 4px 10px;
+        border-radius: 20px;
+      }
+      .badge-done {
+        background: var(--green-bg);
+        color: var(--green);
+      }
+      .badge-solo {
+        background: var(--tag-bg);
+        color: var(--tag-text);
+      }
+      .badge-dot {
+        width: 5px;
+        height: 5px;
+        border-radius: 50%;
+        background: currentColor;
+      }
+      .hero h1 {
+        font-family: "DM Serif Display", serif;
+        font-size: clamp(1.9rem, 4vw, 2.8rem);
+        line-height: 1.15;
+        letter-spacing: -0.8px;
+        margin-bottom: 1.1rem;
+      }
+      .hero-lead {
+        font-size: 17px;
+        color: var(--text-secondary);
+        max-width: 640px;
+        line-height: 1.65;
+        margin-bottom: 2rem;
+      }
+      .hero-stack {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+        margin-bottom: 2rem;
+      }
+      .tech-tag {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        background: var(--tag-bg);
+        color: var(--tag-text);
+        font-size: 12.5px;
+        font-weight: 500;
+        padding: 5px 11px;
+        border-radius: 6px;
+      }
+      .tech-tag img {
+        width: 14px;
+        height: 14px;
+        object-fit: contain;
+      }
+      .hero-links {
+        display: flex;
+        gap: 10px;
+        flex-wrap: wrap;
+      }
+      .link-btn {
+        display: inline-flex;
+        align-items: center;
+        gap: 7px;
+        font-size: 13.5px;
+        font-weight: 500;
+        padding: 9px 18px;
+        border-radius: var(--radius-sm);
+        text-decoration: none;
+        transition:
+          transform 0.15s,
+          opacity 0.2s;
+      }
+      .link-btn:hover {
+        transform: translateY(-1px);
+        opacity: 0.85;
+      }
+      .link-btn-primary {
+        background: var(--text);
+        color: #fff;
+      }
+      .link-btn-outline {
+        background: transparent;
+        border: 0.5px solid var(--border-strong);
+        color: var(--text);
+      }
+      .link-btn-outline:hover {
+        background: var(--surface);
+        opacity: 1;
+      }
+      .link-btn svg {
+        width: 14px;
+        height: 14px;
+        stroke: currentColor;
+        fill: none;
+        stroke-width: 2;
+        stroke-linecap: round;
+        stroke-linejoin: round;
+      }
+
+      /* SIDEBAR LAYOUT */
+      .doc-layout {
+        display: grid;
+        grid-template-columns: 200px 1fr;
+        gap: 3rem;
+        align-items: start;
+      }
+      .sidebar {
+        position: sticky;
+        top: 80px;
+        display: flex;
+        flex-direction: column;
+        gap: 4px;
+      }
+      .sidebar-label {
+        font-size: 11px;
+        font-weight: 500;
+        text-transform: uppercase;
+        letter-spacing: 0.08em;
+        color: var(--text-tertiary);
+        margin-bottom: 4px;
+        padding: 0 8px;
+      }
+      .sidebar-link {
+        font-size: 13.5px;
+        color: var(--text-secondary);
+        text-decoration: none;
+        padding: 5px 8px;
+        border-radius: 6px;
+        transition:
+          background 0.15s,
+          color 0.15s;
+        display: block;
+      }
+      .sidebar-link:hover {
+        background: var(--surface2);
+        color: var(--text);
+      }
+      .sidebar-link.active {
+        background: var(--accent-light);
+        color: var(--accent);
+        font-weight: 500;
+      }
+      .sidebar-divider {
+        height: 0.5px;
+        background: var(--border);
+        margin: 6px 0;
+      }
+
+      /* CONTENT */
+      .doc-content {
+        min-width: 0;
+      }
+      .doc-section {
+        margin-bottom: 4rem;
+        scroll-margin-top: 80px;
+      }
+      .section-label {
+        font-size: 11.5px;
+        font-weight: 500;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        color: var(--text-tertiary);
+        margin-bottom: 0.6rem;
+      }
+      .doc-section h2 {
+        font-family: "DM Serif Display", serif;
+        font-size: 1.65rem;
+        letter-spacing: -0.4px;
+        line-height: 1.2;
+        margin-bottom: 1rem;
+      }
+      .doc-section h3 {
+        font-size: 15px;
+        font-weight: 500;
+        margin: 1.75rem 0 0.6rem;
+        color: var(--text);
+      }
+      .doc-section p {
+        color: var(--text-secondary);
+        margin-bottom: 1rem;
+        font-size: 15px;
+        line-height: 1.7;
+      }
+      .doc-section p:last-child {
+        margin-bottom: 0;
+      }
+      .doc-section strong {
+        color: var(--text);
+        font-weight: 500;
+      }
+
+      /* CALLOUT */
+      .callout {
+        background: var(--accent-light);
+        border: 0.5px solid rgba(26, 86, 160, 0.2);
+        border-left: 3px solid var(--accent);
+        border-radius: var(--radius-sm);
+        padding: 1rem 1.25rem;
+        margin: 1.5rem 0;
+        font-size: 14px;
+        color: var(--accent);
+        line-height: 1.6;
+      }
+      .callout-warn {
+        background: var(--amber-bg);
+        border-color: rgba(122, 79, 16, 0.2);
+        border-left-color: var(--amber);
+        color: var(--amber);
+      }
+
+      /* CODE BLOCK */
+      .code-block {
+        background: var(--code-bg);
+        border-radius: var(--radius-sm);
+        padding: 1rem 1.25rem;
+        margin: 1rem 0;
+        font-family: "DM Mono", monospace;
+        font-size: 13px;
+        line-height: 1.6;
+        overflow-x: auto;
+        border: 0.5px solid rgba(255, 255, 255, 0.05);
+      }
+      .code-block .c-green {
+        color: var(--code-green);
+      }
+      .code-block .c-blue {
+        color: var(--code-blue);
+      }
+      .code-block .c-yellow {
+        color: var(--code-yellow);
+      }
+      .code-block .c-dim {
+        color: #585b70;
+      }
+      code {
+        font-family: "DM Mono", monospace;
+        font-size: 0.87em;
+        background: var(--surface2);
+        padding: 2px 6px;
+        border-radius: 4px;
+        color: var(--text);
+      }
+
+      /* IMAGE PLACEHOLDERS */
+      .img-placeholder {
+        background: var(--surface);
+        border: 1.5px dashed var(--border-strong);
+        border-radius: var(--radius);
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        padding: 2.5rem;
+        margin: 1.5rem 0;
+        text-align: center;
+        min-height: 220px;
+      }
+      .img-placeholder-icon {
+        font-size: 2rem;
+        opacity: 0.25;
+      }
+      .img-placeholder-label {
+        font-size: 13px;
+        font-weight: 500;
+        color: var(--text-tertiary);
+      }
+      .img-placeholder-hint {
+        font-size: 12px;
+        color: var(--text-tertiary);
+        opacity: 0.7;
+      }
+      .img-placeholder img {
+        max-width: 100%;
+        border-radius: 8px;
+        display: none;
+      }
+
+      /* WORKFLOW STEPS */
+      .steps {
+        display: flex;
+        flex-direction: column;
+        gap: 0;
+        margin: 1.5rem 0;
+      }
+      .step {
+        display: grid;
+        grid-template-columns: 36px 1fr;
+        gap: 1rem;
+        padding: 1.25rem 0;
+        border-bottom: 0.5px solid var(--border);
+      }
+      .step:last-child {
+        border-bottom: none;
+      }
+      .step-num {
+        width: 28px;
+        height: 28px;
+        border-radius: 50%;
+        background: var(--accent);
+        color: #fff;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 12px;
+        font-weight: 500;
+        flex-shrink: 0;
+        margin-top: 2px;
+      }
+      .step-body {
+      }
+      .step-title {
+        font-size: 15px;
+        font-weight: 500;
+        margin-bottom: 4px;
+      }
+      .step-desc {
+        font-size: 14px;
+        color: var(--text-secondary);
+        line-height: 1.6;
+        margin: 0;
+      }
+
+      /* IMPROVEMENTS */
+      .improvement-list {
+        display: flex;
+        flex-direction: column;
+        gap: 0;
+        margin-top: 1rem;
+      }
+      .improvement {
+        padding: 1.25rem 0;
+        border-bottom: 0.5px solid var(--border);
+      }
+      .improvement:last-child {
+        border-bottom: none;
+      }
+      .improvement-title {
+        font-size: 15px;
+        font-weight: 500;
+        margin-bottom: 0.4rem;
+        color: var(--text);
+      }
+      .improvement-desc {
+        font-size: 14px;
+        color: var(--text-secondary);
+        line-height: 1.65;
+        margin: 0;
+      }
+
+      /* BUSINESS QUOTES */
+      .quote-grid {
+        display: flex;
+        flex-direction: column;
+        gap: 1rem;
+        margin-top: 1rem;
+      }
+      .quote-card {
+        background: var(--surface);
+        border: 0.5px solid var(--border);
+        border-radius: var(--radius);
+        padding: 1.4rem 1.5rem;
+      }
+      .quote-text {
+        font-family: "DM Serif Display", serif;
+        font-size: 1rem;
+        font-style: italic;
+        color: var(--text);
+        margin-bottom: 0.6rem;
+        line-height: 1.5;
+      }
+      .quote-explanation {
+        font-size: 13.5px;
+        color: var(--text-secondary);
+        line-height: 1.65;
+        margin: 0;
+      }
+
+      /* COST TABLE */
+      .cost-table-wrap {
+        overflow-x: auto;
+        margin: 1.5rem 0;
+      }
+      table {
+        width: 100%;
+        border-collapse: collapse;
+        font-size: 14px;
+      }
+      th {
+        text-align: left;
+        font-weight: 500;
+        font-size: 12px;
+        text-transform: uppercase;
+        letter-spacing: 0.07em;
+        color: var(--text-tertiary);
+        padding: 8px 12px;
+        border-bottom: 0.5px solid var(--border-strong);
+      }
+      td {
+        padding: 10px 12px;
+        border-bottom: 0.5px solid var(--border);
+        color: var(--text-secondary);
+      }
+      tr:last-child td {
+        border-bottom: none;
+      }
+      td:first-child {
+        color: var(--text);
+        font-weight: 400;
+      }
+      .cost-highlight {
+        background: var(--green-bg);
+      }
+      .cost-highlight td {
+        color: var(--green);
+        font-weight: 500;
+      }
+      .cost-highlight td:first-child {
+        color: var(--green);
+      }
+
+      /* LIMITATIONS */
+      .limitation-list {
+        display: flex;
+        flex-direction: column;
+        gap: 0;
+        margin-top: 1rem;
+      }
+      .limitation {
+        padding: 1.1rem 0;
+        border-bottom: 0.5px solid var(--border);
+        display: grid;
+        grid-template-columns: 20px 1fr;
+        gap: 0.75rem;
+        align-items: start;
+      }
+      .limitation:last-child {
+        border-bottom: none;
+      }
+      .limitation-dot {
+        width: 6px;
+        height: 6px;
+        border-radius: 50%;
+        background: var(--amber);
+        margin-top: 8px;
+      }
+      .limitation-text {
+      }
+      .limitation-title {
+        font-size: 14.5px;
+        font-weight: 500;
+        margin-bottom: 3px;
+      }
+      .limitation-desc {
+        font-size: 13.5px;
+        color: var(--text-secondary);
+        line-height: 1.6;
+        margin: 0;
+      }
+
+      /* ALTERNATIVES */
+      .alt-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 1rem;
+        margin-top: 1rem;
+      }
+      .alt-card {
+        background: var(--surface);
+        border: 0.5px solid var(--border);
+        border-radius: var(--radius);
+        padding: 1.25rem 1.4rem;
+      }
+      .alt-title {
+        font-size: 15px;
+        font-weight: 500;
+        margin-bottom: 0.5rem;
+      }
+      .alt-desc {
+        font-size: 13.5px;
+        color: var(--text-secondary);
+        line-height: 1.6;
+        margin: 0;
+      }
+      .alt-verdict {
+        margin-top: 0.75rem;
+        font-size: 12.5px;
+        font-weight: 500;
+        color: var(--accent);
+      }
+
+      /* FOOTER */
+      footer {
+        border-top: 0.5px solid var(--border);
+        padding: 2rem;
+        text-align: center;
+        color: var(--text-tertiary);
+        font-size: 13px;
+      }
+      footer a {
+        color: var(--accent);
+        text-decoration: none;
+      }
+
+      /* RESPONSIVE */
+      @media (max-width: 720px) {
+        .doc-layout {
+          grid-template-columns: 1fr;
+        }
+        .sidebar {
+          display: none;
+        }
+        .alt-grid {
+          grid-template-columns: 1fr;
+        }
+        .page {
+          padding: 0 1.25rem 4rem;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <nav>
+      <a href="index.html" class="nav-back">
+        <svg viewBox="0 0 24 24"><path d="M19 12H5M12 5l-7 7 7 7" /></svg>
+        Back to portfolio
+      </a>
+      <span class="nav-title">Project documentation</span>
+      <div class="nav-right">
+        <a
+          href="https://github.com/philip-sutton4/DPP-App"
+          class="nav-repo-link"
+          target="_blank"
+          rel="noopener"
+        >
+          <svg viewBox="0 0 24 24">
+            <path
+              d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"
+            />
+          </svg>
+          DPP-App
+        </a>
+        <a
+          href="https://github.com/philip-sutton4/DPP-Kubernetes"
+          class="nav-repo-link"
+          target="_blank"
+          rel="noopener"
+        >
+          <svg viewBox="0 0 24 24">
+            <path
+              d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"
+            />
+          </svg>
+          DPP-Kubernetes
+        </a>
+      </div>
+    </nav>
+
+    <div class="page">
+      <!-- HERO -->
+      <div class="hero">
+        <div class="hero-meta">
+          <span class="badge badge-done"
+            ><span class="badge-dot"></span>Completed</span
+          >
+          <span class="badge badge-solo">Solo project</span>
+          <span class="badge badge-solo">Azure · Poland Central</span>
+        </div>
+        <h1>
+          Ephemeral PR Preview Environment Platform
+          <em
+            style="
+              font-style: italic;
+              color: var(--text-secondary);
+              font-size: 0.75em;
+            "
+            >(AKS-based)</em
+          >
+        </h1>
+        <p class="hero-lead">
+          A fully automated Kubernetes CI/CD platform that spins up an isolated,
+          HTTPS-accessible preview environment for every pull request — and
+          tears it down automatically on merge. No manual steps, no shared
+          staging server, no idle costs.
+        </p>
+        <div class="hero-stack">
+          <span class="tech-tag"
+            ><img
+              src="https://img.icons8.com/?size=100&id=lWL5zqQfa1pO&format=png&color=000000"
+              alt=""
+            />Azure DevOps</span
+          >
+          <span class="tech-tag"
+            ><img
+              src="https://cdn.simpleicons.org/kubernetes/326ce5"
+              alt=""
+            />AKS</span
+          >
+          <span class="tech-tag"
+            ><img
+              src="https://cdn.simpleicons.org/helm/0f1689"
+              alt=""
+            />Helm</span
+          >
+          <span class="tech-tag"
+            ><img
+              src="https://cdn.simpleicons.org/docker/2496ed"
+              alt=""
+            />Docker</span
+          >
+          <span class="tech-tag"
+            ><img
+              src="https://cdn.simpleicons.org/nodedotjs/339933"
+              alt=""
+            />Node.js</span
+          >
+          <span class="tech-tag"
+            ><img
+              src="https://cdn.simpleicons.org/vuedotjs/42b883"
+              alt=""
+            />Vue</span
+          >
+          <span class="tech-tag">
+            <svg
+              width="14"
+              height="14"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="#0078d4"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            >
+              <path
+                d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"
+              />
+            </svg>
+            Bicep
+          </span>
+          <span class="tech-tag">cert-manager</span>
+          <span class="tech-tag">ingress-nginx</span>
+        </div>
+        <div class="hero-links">
+          <a
+            href="https://github.com/philip-sutton4/DPP-App"
+            class="link-btn link-btn-primary"
+            target="_blank"
+            rel="noopener"
+          >
+            <svg viewBox="0 0 24 24">
+              <path
+                d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"
+              />
+            </svg>
+            App repository
+          </a>
+          <a
+            href="https://github.com/philip-sutton4/DPP-Kubernetes"
+            class="link-btn link-btn-outline"
+            target="_blank"
+            rel="noopener"
+          >
+            <svg viewBox="0 0 24 24">
+              <path
+                d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"
+              />
+            </svg>
+            Kubernetes repository
+          </a>
+        </div>
+      </div>
+
+      <!-- SIDEBAR + CONTENT -->
+      <div class="doc-layout">
+        <aside class="sidebar">
+          <p class="sidebar-label">On this page</p>
+          <a href="#overview" class="sidebar-link">Overview & architecture</a>
+          <a href="#workflow" class="sidebar-link">Example workflow</a>
+          <a href="#technical" class="sidebar-link">Technical improvements</a>
+          <a href="#business" class="sidebar-link">Business impact</a>
+          <div class="sidebar-divider"></div>
+          <a href="#costs" class="sidebar-link">Cost estimation</a>
+          <a href="#limitations" class="sidebar-link">Limitations</a>
+          <a href="#alternatives" class="sidebar-link"
+            >Alternatives considered</a
+          >
+        </aside>
+
+        <div class="doc-content">
+          <!-- OVERVIEW -->
+          <section class="doc-section" id="overview">
+            <p class="section-label">Architecture</p>
+            <h2>Overview &amp; Architecture</h2>
+
+            <p>
+              The system is split across two GitHub repositories to keep
+              concerns separate. The application repository (<a
+                href="https://github.com/philip-sutton4/DPP-App"
+                target="_blank"
+                style="color: var(--accent)"
+                >DPP-App</a
+              >) holds frontend and backend source code alongside the build
+              pipeline. The infrastructure repository (<a
+                href="https://github.com/philip-sutton4/DPP-Kubernetes"
+                target="_blank"
+                style="color: var(--accent)"
+                >DPP-Kubernetes</a
+              >) holds the Helm chart, Bicep templates, and all deployment
+              pipelines. Infrastructure and application concerns evolve
+              independently.
+            </p>
+
+            <p>
+              The AKS cluster runs in Azure's Poland Central region on a single
+              <code>Standard_B2s_v2</code> burstable node. Two cluster-level
+              services are bootstrapped once and persist for the cluster's
+              lifetime: <code>ingress-nginx</code> (HTTP/HTTPS reverse proxy,
+              single Azure public IP) and <code>cert-manager</code> (automatic
+              Let's Encrypt TLS for every new environment).
+            </p>
+
+            <p>
+              Application workloads live in isolated Kubernetes namespaces — one
+              permanent <code>main</code> namespace reflecting the current state
+              of the main branch, plus ephemeral
+              <code>feature-*</code> namespaces created per PR branch and
+              destroyed on merge.
+            </p>
+
+            <!-- ARCHITECTURE DIAGRAM IMAGE PLACEHOLDER -->
+            <div class="img-placeholder">
+              <div class="img-placeholder-icon">🗺️</div>
+              <p class="img-placeholder-label">Architecture diagram</p>
+              <p class="img-placeholder-hint">
+                Replace with: architecture diagram from the PDF (page 2 diagram
+                showing repositories, Docker Hub, AKS cluster, namespaces, and
+                pipelines)
+              </p>
+            </div>
+          </section>
+
+          <!-- WORKFLOW -->
+          <section class="doc-section" id="workflow">
+            <p class="section-label">How it works</p>
+            <h2>Example workflow</h2>
+
+            <div class="callout">
+              <strong>Prerequisite:</strong> A running AKS cluster provisioned
+              via the one-time bootstrap pipeline (Bicep + Azure DevOps). Safe
+              to rerun at any point — idempotent by design.
+            </div>
+
+            <!-- Bootstrap pipeline screenshot placeholder -->
+            <div class="img-placeholder">
+              <div class="img-placeholder-icon">📸</div>
+              <p class="img-placeholder-label">
+                Screenshot: Bootstrap pipeline run
+              </p>
+              <p class="img-placeholder-hint">
+                Replace with: Azure DevOps bootstrap pipeline screenshot (page 3
+                — showing Initialize job, Checkout, Create resource group,
+                Install ingress-nginx / cert-manager steps)
+              </p>
+            </div>
+
+            <div class="steps">
+              <div class="step">
+                <div class="step-num">1</div>
+                <div class="step-body">
+                  <p class="step-title">Developer pushes a feature branch</p>
+                  <p class="step-desc">
+                    A developer pushes any feature branch to the application
+                    repository. No manual steps are required from this point
+                    forward — the platform takes over entirely.
+                  </p>
+                </div>
+              </div>
+
+              <!-- Step 1 screenshot placeholder -->
+              <div style="padding: 0 0 1rem 52px">
+                <div
+                  class="img-placeholder"
+                  style="min-height: 100px; padding: 1.5rem"
+                >
+                  <div class="img-placeholder-icon" style="font-size: 1.25rem">
+                    📸
+                  </div>
+                  <p class="img-placeholder-label">
+                    Screenshot: GitHub branch push notification
+                  </p>
+                  <p class="img-placeholder-hint">
+                    Replace with: GitHub UI screenshot showing
+                    "feature/access-rights had recent pushes" (page 3)
+                  </p>
+                </div>
+              </div>
+
+              <div class="step">
+                <div class="step-num">2</div>
+                <div class="step-body">
+                  <p class="step-title">
+                    Build pipeline detects changes &amp; builds only what
+                    changed
+                  </p>
+                  <p class="step-desc">
+                    The pipeline diffs the branch against <code>main</code> and
+                    builds only the service that actually changed — tagging the
+                    Docker image with the branch name. A CSS fix in the frontend
+                    does not trigger a backend build.
+                  </p>
+                </div>
+              </div>
+
+              <!-- Step 2 screenshot placeholder -->
+              <div style="padding: 0 0 1rem 52px">
+                <div
+                  class="img-placeholder"
+                  style="min-height: 100px; padding: 1.5rem"
+                >
+                  <div class="img-placeholder-icon" style="font-size: 1.25rem">
+                    📸
+                  </div>
+                  <p class="img-placeholder-label">
+                    Screenshot: Azure DevOps build pipeline run
+                  </p>
+                  <p class="img-placeholder-hint">
+                    Replace with: Azure DevOps pipeline screenshot showing
+                    DetectChanges → BuildFrontend stages (BuildBackend skipped)
+                    (page 4)
+                  </p>
+                </div>
+              </div>
+
+              <div class="step">
+                <div class="step-num">3</div>
+                <div class="step-body">
+                  <p class="step-title">
+                    Deploy pipeline creates an isolated environment
+                  </p>
+                  <p class="step-desc">
+                    Triggered automatically by the build pipeline completing,
+                    the deploy pipeline runs
+                    <code>helm upgrade --install</code> against a dedicated
+                    namespace and generates a unique HTTPS URL for the branch.
+                  </p>
+                </div>
+              </div>
+
+              <!-- Step 3 screenshot placeholder -->
+              <div style="padding: 0 0 1rem 52px">
+                <div
+                  class="img-placeholder"
+                  style="min-height: 120px; padding: 1.5rem"
+                >
+                  <div class="img-placeholder-icon" style="font-size: 1.25rem">
+                    📸
+                  </div>
+                  <p class="img-placeholder-label">
+                    Screenshot: Helm deploy output in pipeline log
+                  </p>
+                  <p class="img-placeholder-hint">
+                    Replace with: Terminal output screenshot showing "NAME:
+                    dpp-feature-access-rights … STATUS: deployed … URL:
+                    https://feature-access-rights.20.215.88.132.nip.io" (page 5)
+                  </p>
+                </div>
+              </div>
+
+              <div class="step">
+                <div class="step-num">4</div>
+                <div class="step-body">
+                  <p class="step-title">
+                    Live environment is accessible over HTTPS
+                  </p>
+                  <p class="step-desc">
+                    Within minutes of the push, the environment is publicly
+                    reachable at
+                    <code>https://feature-&lt;branch&gt;.IP.nip.io</code> — with
+                    a real TLS certificate, accessible to anyone on the team
+                    from any device.
+                  </p>
+                </div>
+              </div>
+
+              <!-- Step 4 screenshot placeholder -->
+              <div style="padding: 0 0 1rem 52px">
+                <div
+                  class="img-placeholder"
+                  style="min-height: 160px; padding: 1.5rem"
+                >
+                  <div class="img-placeholder-icon" style="font-size: 1.25rem">
+                    📸
+                  </div>
+                  <p class="img-placeholder-label">
+                    Screenshot: Live preview environment in browser
+                  </p>
+                  <p class="img-placeholder-hint">
+                    Replace with: Browser screenshot of the live DPP Admin panel
+                    at the feature URL (page 5)
+                  </p>
+                </div>
+              </div>
+
+              <div class="step">
+                <div class="step-num">5</div>
+                <div class="step-body">
+                  <p class="step-title">Merge &amp; automatic cleanup</p>
+                  <p class="step-desc">
+                    Once the PR is merged, the environment is automatically
+                    removed — Helm release uninstalled, namespace deleted, all
+                    associated resources (pods, services, secrets, ingress
+                    rules, persistent volumes) cleaned up by Kubernetes. An
+                    hourly cleanup pipeline also reconciles running namespaces
+                    against live GitHub branches.
+                  </p>
+                </div>
+              </div>
+
+              <!-- Step 5 screenshot placeholder -->
+              <div style="padding: 0 0 1rem 52px">
+                <div
+                  class="img-placeholder"
+                  style="min-height: 100px; padding: 1.5rem"
+                >
+                  <div class="img-placeholder-icon" style="font-size: 1.25rem">
+                    📸
+                  </div>
+                  <p class="img-placeholder-label">
+                    Screenshot: Namespace deleted + 404 confirmation
+                  </p>
+                  <p class="img-placeholder-hint">
+                    Replace with: Terminal output "release uninstalled /
+                    namespace deleted" + browser 404 screenshot (page 6)
+                  </p>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          <!-- TECHNICAL IMPROVEMENTS -->
+          <section class="doc-section" id="technical">
+            <p class="section-label">Engineering</p>
+            <h2>Technical improvements</h2>
+            <p>
+              Built on top of an existing local Kubernetes setup using
+              <code>kind</code>, this platform represents a significant step
+              forward in automation, accessibility, and engineering rigour.
+            </p>
+
+            <div class="improvement-list">
+              <div class="improvement">
+                <p class="improvement-title">
+                  From local to cloud-accessible environments
+                </p>
+                <p class="improvement-desc">
+                  Running on <code>kind</code> requires manually loading Docker
+                  images, managing port forwarding, and sharing access via
+                  screen sharing. A preview environment on AKS is publicly
+                  accessible over HTTPS with a real TLS certificate — anyone
+                  with the URL can review a feature branch from any device,
+                  anywhere.
+                </p>
+              </div>
+              <div class="improvement">
+                <p class="improvement-title">
+                  GitOps-style PR preview environments
+                </p>
+                <p class="improvement-desc">
+                  Each branch maps deterministically to a running environment —
+                  <code>feature/my-branch</code> becomes namespace
+                  <code>feature-my-branch</code> at
+                  <code>https://feature-my-branch.IP.nip.io</code>. The cluster
+                  state always reflects the Git state. There is no shared
+                  staging server accumulating unknown changes, and no manual
+                  environment management.
+                </p>
+              </div>
+              <div class="improvement">
+                <p class="improvement-title">Path-based change detection</p>
+                <p class="improvement-desc">
+                  The build pipeline diffs the branch against
+                  <code>main</code> and builds only the service that actually
+                  changed. A CSS fix in the frontend does not trigger a backend
+                  build. This reduces build times and Docker Hub push volume
+                  significantly compared to rebuilding everything on every push.
+                </p>
+              </div>
+              <div class="improvement">
+                <p class="improvement-title">Smart image tag resolution</p>
+                <p class="improvement-desc">
+                  When only one service changes on a new branch, the other
+                  service's branch-specific image tag doesn't exist yet. Rather
+                  than failing, the deploy pipeline checks Docker Hub and falls
+                  back to <code>main-latest</code> for the unchanged service.
+                  The environment is always deployable from the first push on
+                  any new branch.
+                </p>
+              </div>
+              <div class="improvement">
+                <p class="improvement-title">
+                  Forced rolling restarts on every deploy
+                </p>
+                <p class="improvement-desc">
+                  A <code>deploymentId</code> annotation on pod templates is set
+                  to the pipeline build ID on every deploy. When Helm sees this
+                  value change it updates the pod spec, triggering a rolling
+                  restart — preventing stale pods when only image content
+                  changes without a tag change.
+                </p>
+              </div>
+              <div class="improvement">
+                <p class="improvement-title">
+                  Pipeline trigger chaining across repositories
+                </p>
+                <p class="improvement-desc">
+                  The deploy pipeline in the Kubernetes repository triggers
+                  automatically on completion of the build pipeline in the
+                  application repository using Azure DevOps pipeline resource
+                  triggers. The repositories are fully decoupled — neither needs
+                  to know the other's internals — but the full build-to-deploy
+                  flow is automatic.
+                </p>
+              </div>
+              <div class="improvement">
+                <p class="improvement-title">Idempotent bootstrap</p>
+                <p class="improvement-desc">
+                  The bootstrap pipeline checks whether each component is
+                  already installed before acting, making it safe to rerun at
+                  any point. It serves as both the initial setup script and the
+                  recovery script. Recreating the entire cluster from scratch
+                  requires a single manual pipeline run with no command-line
+                  interaction.
+                </p>
+              </div>
+              <div class="improvement">
+                <p class="improvement-title">
+                  Automated TLS for every environment
+                </p>
+                <p class="improvement-desc">
+                  <code>cert-manager</code> watches for new ingress resources
+                  and automatically provisions a Let's Encrypt certificate for
+                  each one within minutes of namespace creation. There is no
+                  certificate management in the pipeline — HTTPS works out of
+                  the box for every preview environment.
+                </p>
+              </div>
+              <div class="improvement">
+                <p class="improvement-title">Cost-aware scheduling as code</p>
+                <p class="improvement-desc">
+                  The cluster start/stop schedule is version-controlled pipeline
+                  YAML, not a manually configured Azure job. It can be reviewed,
+                  modified via PR, and rolled back like any other change. The
+                  schedule is self-documenting — the cron expressions and their
+                  intent are visible to anyone reading the repository.
+                </p>
+              </div>
+              <div class="improvement">
+                <p class="improvement-title">
+                  Namespace isolation as a security boundary
+                </p>
+                <p class="improvement-desc">
+                  Each environment runs in its own Kubernetes namespace with its
+                  own secrets, configmaps, and persistent volumes. A crash or
+                  misconfiguration in one environment cannot affect another.
+                  Environments are deleted cleanly with a single namespace
+                  deletion — all associated resources are removed automatically.
+                </p>
+              </div>
+            </div>
+          </section>
+
+          <!-- BUSINESS IMPACT -->
+          <section class="doc-section" id="business">
+            <p class="section-label">Business value</p>
+            <h2>Business impact</h2>
+            <p>
+              This platform was built with a clear business goal: reduce risk,
+              reduce cost, and increase the speed at which a team can safely
+              deliver value. Every technical decision is in service of those
+              three outcomes.
+            </p>
+
+            <div class="quote-grid">
+              <div class="quote-card">
+                <p class="quote-text">
+                  "We caught bugs before they reached customers."
+                </p>
+                <p class="quote-explanation">
+                  Every pull request gets its own live environment
+                  automatically. A tester, product owner, or non-technical
+                  stakeholder can click a link and see exactly what a change
+                  looks like before it goes live — without asking a developer to
+                  set anything up. Bugs get caught earlier, when they're cheap
+                  to fix.
+                </p>
+              </div>
+              <div class="quote-card">
+                <p class="quote-text">
+                  "Deployments stopped being a scary event."
+                </p>
+                <p class="quote-explanation">
+                  This pipeline makes deployments automatic, consistent, and
+                  identical every single time. A deployment at 9am on Monday
+                  follows exactly the same process as one at 11pm on Friday. The
+                  human is removed from the equation.
+                </p>
+              </div>
+              <div class="quote-card">
+                <p class="quote-text">
+                  "We stopped paying for things we weren't using."
+                </p>
+                <p class="quote-explanation">
+                  The scheduled start/stop cuts the infrastructure bill roughly
+                  in half — from approximately €37/month to €17/month — by
+                  shutting the cluster down outside working hours. Stale preview
+                  environments are cleaned up hourly rather than accumulating
+                  indefinitely.
+                </p>
+              </div>
+              <div class="quote-card">
+                <p class="quote-text">
+                  "New developers could get productive on day one."
+                </p>
+                <p class="quote-explanation">
+                  Because the entire environment is defined as code and cluster
+                  setup is a single pipeline run, a new developer doesn't spend
+                  their first week getting things working. They push a branch
+                  and have a running preview environment without needing to
+                  understand the infrastructure.
+                </p>
+              </div>
+              <div class="quote-card">
+                <p class="quote-text">
+                  "We could prove exactly what was deployed and when."
+                </p>
+                <p class="quote-explanation">
+                  Every Docker image is tagged with a build ID. Every deployment
+                  is logged in the pipeline with a timestamp and the triggering
+                  commit. If something goes wrong, you can trace back exactly
+                  what changed, when it was deployed, and by whom — in minutes
+                  rather than hours.
+                </p>
+              </div>
+              <div class="quote-card">
+                <p class="quote-text">
+                  "Preview environments cleaned themselves up."
+                </p>
+                <p class="quote-explanation">
+                  Stale environments don't require a developer to remember to
+                  delete them. The platform checks every hour whether a feature
+                  branch still exists in GitHub and removes the environment
+                  automatically if the branch has been merged or deleted.
+                </p>
+              </div>
+            </div>
+          </section>
+
+          <!-- COSTS -->
+          <section class="doc-section" id="costs">
+            <p class="section-label">Infrastructure</p>
+            <h2>Cost estimation</h2>
+            <p>
+              All costs are approximate, based on Azure Poland Central pricing
+              for <code>Standard_B2s_v2</code>. The scheduled stop/start
+              pipeline saves approximately €20/month — a
+              <strong>54% reduction</strong> — by running the cluster only
+              during working hours on weekdays.
+            </p>
+
+            <div class="cost-table-wrap">
+              <table>
+                <thead>
+                  <tr>
+                    <th>Component</th>
+                    <th>Always on</th>
+                    <th>With stop/start</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>AKS node (Standard_B2s_v2)</td>
+                    <td>~€31/mo</td>
+                    <td>~€11/mo</td>
+                  </tr>
+                  <tr>
+                    <td>Azure Load Balancer</td>
+                    <td>~€3/mo</td>
+                    <td>~€3/mo</td>
+                  </tr>
+                  <tr>
+                    <td>Managed OS disk (64GB)</td>
+                    <td>~€3/mo</td>
+                    <td>~€3/mo</td>
+                  </tr>
+                  <tr>
+                    <td>cert-manager / ingress-nginx</td>
+                    <td>Free</td>
+                    <td>Free</td>
+                  </tr>
+                  <tr>
+                    <td>nip.io DNS</td>
+                    <td>Free</td>
+                    <td>Free</td>
+                  </tr>
+                  <tr>
+                    <td>Docker Hub (public repo)</td>
+                    <td>Free</td>
+                    <td>Free</td>
+                  </tr>
+                  <tr>
+                    <td>Azure DevOps (private project)</td>
+                    <td>Free</td>
+                    <td>Free</td>
+                  </tr>
+                  <tr class="cost-highlight">
+                    <td>Total</td>
+                    <td>~€37/mo</td>
+                    <td>~€17/mo</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+
+            <div class="callout">
+              The <code>Standard_B2s_v2</code> is a burstable VM — it earns CPU
+              credits when idle and spends them under load. Since the cluster is
+              idle most of the time, this model is well suited to a dev
+              environment with intermittent traffic.
+            </div>
+          </section>
+
+          <!-- LIMITATIONS -->
+          <section class="doc-section" id="limitations">
+            <p class="section-label">Known constraints</p>
+            <h2>Limitations &amp; key notes</h2>
+            <p>
+              This is a development environment designed for PR preview and
+              demonstration purposes. The following are deliberate
+              simplifications that would differ in a commercial project.
+            </p>
+
+            <div class="callout callout-warn">
+              These are intentional tradeoffs for a portfolio project, not
+              oversights. Each one is documented with the reasoning behind it.
+            </div>
+
+            <div class="limitation-list">
+              <div class="limitation">
+                <div class="limitation-dot"></div>
+                <div class="limitation-text">
+                  <p class="limitation-title">
+                    Persistent cluster with ephemeral namespaces
+                  </p>
+                  <p class="limitation-desc">
+                    The AKS cluster itself is not ephemeral — only the PR
+                    namespaces are. A fully ephemeral cluster approach was ruled
+                    out due to the ~8 minute provisioning time making PR preview
+                    turnaround impractical.
+                  </p>
+                </div>
+              </div>
+              <div class="limitation">
+                <div class="limitation-dot"></div>
+                <div class="limitation-text">
+                  <p class="limitation-title">Single node, no redundancy</p>
+                  <p class="limitation-desc">
+                    A single <code>Standard_B2s_v2</code> node with no
+                    availability zone redundancy. A node failure takes down all
+                    environments simultaneously. A commercial setup would use
+                    multiple nodes across zones.
+                  </p>
+                </div>
+              </div>
+              <div class="limitation">
+                <div class="limitation-dot"></div>
+                <div class="limitation-text">
+                  <p class="limitation-title">nip.io for dynamic URLs</p>
+                  <p class="limitation-desc">
+                    Preview URLs are tied to the cluster IP via nip.io. If the
+                    cluster is recreated, the IP changes and all URLs change
+                    with it. A commercial setup would use a custom domain with
+                    wildcard DNS.
+                  </p>
+                </div>
+              </div>
+              <div class="limitation">
+                <div class="limitation-dot"></div>
+                <div class="limitation-text">
+                  <p class="limitation-title">Let's Encrypt rate limits</p>
+                  <p class="limitation-desc">
+                    Each environment gets its own TLS certificate — wildcard
+                    certificates are not possible for nip.io subdomains as Let's
+                    Encrypt wildcard issuance requires DNS-01 challenge with DNS
+                    control. Every new namespace consumes from the 50 weekly
+                    issuances Let's Encrypt allows, a quota shared globally
+                    across all nip.io users.
+                  </p>
+                </div>
+              </div>
+              <div class="limitation">
+                <div class="limitation-dot"></div>
+                <div class="limitation-text">
+                  <p class="limitation-title">
+                    Shared MongoDB database across namespaces
+                  </p>
+                  <p class="limitation-desc">
+                    All preview environments share a single MongoDB Atlas
+                    instance. Data created or modified in one namespace is
+                    visible to all others. In a commercial setup each
+                    environment would have its own isolated database. A
+                    deliberate simplification for a portfolio project.
+                  </p>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          <!-- ALTERNATIVES -->
+          <section class="doc-section" id="alternatives">
+            <p class="section-label">Design decisions</p>
+            <h2>Alternatives considered</h2>
+            <p>
+              The following alternatives were evaluated before committing to
+              AKS. AKS was chosen because the application already ran on
+              Kubernetes locally using <code>kind</code>, and demonstrates a
+              broader, more commercially transferable skill set.
+            </p>
+
+            <div class="alt-grid">
+              <div class="alt-card">
+                <p class="alt-title">Azure Container Apps</p>
+                <p class="alt-desc">
+                  Scales to zero with no idle cost — no start/stop scheduler
+                  needed. Simpler to operate for pure container workloads.
+                </p>
+                <p class="alt-verdict">
+                  Not chosen — requires rewriting Helm/ingress/PV manifests. AKS
+                  is more directly transferable to commercial Kubernetes
+                  environments.
+                </p>
+              </div>
+              <div class="alt-card">
+                <p class="alt-title">k3s on a cheap VM</p>
+                <p class="alt-desc">
+                  Lightweight Kubernetes on a £3–5/month VPS. Helm chart would
+                  work without modification since k3s is fully
+                  Kubernetes-compatible.
+                </p>
+                <p class="alt-verdict">
+                  Not chosen — requires self-managing the VM, OS updates, and
+                  k3s upgrades. AKS as a managed service is the more appropriate
+                  choice for a cloud-native portfolio project.
+                </p>
+              </div>
+              <div class="alt-card">
+                <p class="alt-title">Spot VMs</p>
+                <p class="alt-desc">
+                  Up to 90% discount over standard pricing. Could reduce node
+                  cost to approximately €2–3/month.
+                </p>
+                <p class="alt-verdict">
+                  Not chosen — evictions with 30 seconds notice make them
+                  unsuitable as the sole node in a single-node cluster.
+                  Acceptable risk in multi-node setups only.
+                </p>
+              </div>
+              <div class="alt-card">
+                <p class="alt-title">Wildcard DNS + custom domain</p>
+                <p class="alt-desc">
+                  Would resolve the nip.io limitations (URL stability on cluster
+                  recreate, Let's Encrypt rate limits, DNS-01 wildcard certs).
+                </p>
+                <p class="alt-verdict">
+                  Valid improvement path — the primary reason it wasn't included
+                  is cost and domain registration overhead for a portfolio
+                  project. Straightforward to migrate to.
+                </p>
+              </div>
+            </div>
+          </section>
+        </div>
+      </div>
+    </div>
+
+    <footer>
+      <p>
+        <a href="index.html">← Back to portfolio</a> &nbsp;·&nbsp; Philip Sutton
+        &nbsp;·&nbsp; <a href="mailto:philip@sutton.pl">philip@sutton.pl</a>
+      </p>
+    </footer>
+
+    <script>
+      const links = document.querySelectorAll(".sidebar-link");
+      const sections = document.querySelectorAll(".doc-section");
+
+      const observer = new IntersectionObserver(
+        (entries) => {
+          entries.forEach((entry) => {
+            if (entry.isIntersecting) {
+              links.forEach((l) => l.classList.remove("active"));
+              const active = document.querySelector(
+                `.sidebar-link[href="#${entry.target.id}"]`,
+              );
+              if (active) active.classList.add("active");
+            }
+          });
+        },
+        { rootMargin: "-20% 0px -70% 0px" },
+      );
+
+      sections.forEach((s) => observer.observe(s));
+
+      const fadeObserver = new IntersectionObserver(
+        (entries) => {
+          entries.forEach((e) => {
+            if (e.isIntersecting) {
+              e.target.style.opacity = "1";
+              e.target.style.transform = "translateY(0)";
+              e.target.style.transition =
+                "opacity 0.5s ease, transform 0.5s ease";
+            }
+          });
+        },
+        { threshold: 0.05 },
+      );
+
+      document
+        .querySelectorAll(
+          ".step, .improvement, .quote-card, .alt-card, .limitation",
+        )
+        .forEach((el) => {
+          el.style.opacity = "0";
+          el.style.transform = "translateY(12px)";
+          fadeObserver.observe(el);
+        });
+    </script>
+  </body>
+</html>
