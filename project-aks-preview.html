@@ -48,6 +48,7 @@
       }
       html {
         scroll-behavior: smooth;
+        zoom: 125%;
       }
       body {
         font-family: "DM Sans", sans-serif;
@@ -398,38 +399,10 @@
       }
 
       /* IMAGE PLACEHOLDERS */
-      .img-placeholder {
-        background: var(--surface);
-        border: 1.5px dashed var(--border-strong);
-        border-radius: var(--radius);
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: center;
-        gap: 8px;
-        padding: 2.5rem;
-        margin: 1.5rem 0;
-        text-align: center;
-        min-height: 220px;
-      }
-      .img-placeholder-icon {
-        font-size: 2rem;
-        opacity: 0.25;
-      }
-      .img-placeholder-label {
-        font-size: 13px;
-        font-weight: 500;
-        color: var(--text-tertiary);
-      }
-      .img-placeholder-hint {
-        font-size: 12px;
-        color: var(--text-tertiary);
-        opacity: 0.7;
-      }
+
       .img-placeholder img {
         max-width: 100%;
-        border-radius: 8px;
-        display: none;
+        display: block;
       }
 
       /* WORKFLOW STEPS */
@@ -884,14 +857,12 @@
             </p>
 
             <!-- ARCHITECTURE DIAGRAM IMAGE PLACEHOLDER -->
+
             <div class="img-placeholder">
-              <div class="img-placeholder-icon">🗺️</div>
-              <p class="img-placeholder-label">Architecture diagram</p>
-              <p class="img-placeholder-hint">
-                Replace with: architecture diagram from the PDF (page 2 diagram
-                showing repositories, Docker Hub, AKS cluster, namespaces, and
-                pipelines)
-              </p>
+              <img
+                src="https://lh3.googleusercontent.com/d/1ccYlQcUw4Y8_7RsUeUDWSsVz7NvZlzvt"
+                alt="Image"
+              />
             </div>
           </section>
 
@@ -908,15 +879,9 @@
 
             <!-- Bootstrap pipeline screenshot placeholder -->
             <div class="img-placeholder">
-              <div class="img-placeholder-icon">📸</div>
-              <p class="img-placeholder-label">
-                Screenshot: Bootstrap pipeline run
-              </p>
-              <p class="img-placeholder-hint">
-                Replace with: Azure DevOps bootstrap pipeline screenshot (page 3
-                — showing Initialize job, Checkout, Create resource group,
-                Install ingress-nginx / cert-manager steps)
-              </p>
+              <img
+                src="https://lh3.googleusercontent.com/d/1UUUk3otNtw99y7FyGev5JEoNLchwMhic"
+              />
             </div>
 
             <div class="steps">
@@ -938,16 +903,9 @@
                   class="img-placeholder"
                   style="min-height: 100px; padding: 1.5rem"
                 >
-                  <div class="img-placeholder-icon" style="font-size: 1.25rem">
-                    📸
-                  </div>
-                  <p class="img-placeholder-label">
-                    Screenshot: GitHub branch push notification
-                  </p>
-                  <p class="img-placeholder-hint">
-                    Replace with: GitHub UI screenshot showing
-                    "feature/access-rights had recent pushes" (page 3)
-                  </p>
+                  <img
+                    src="https://lh3.googleusercontent.com/d/11l8gGLu4drpkq7hTs9VFmgB8s5sZLsQk"
+                  />
                 </div>
               </div>
 
@@ -973,17 +931,9 @@
                   class="img-placeholder"
                   style="min-height: 100px; padding: 1.5rem"
                 >
-                  <div class="img-placeholder-icon" style="font-size: 1.25rem">
-                    📸
-                  </div>
-                  <p class="img-placeholder-label">
-                    Screenshot: Azure DevOps build pipeline run
-                  </p>
-                  <p class="img-placeholder-hint">
-                    Replace with: Azure DevOps pipeline screenshot showing
-                    DetectChanges → BuildFrontend stages (BuildBackend skipped)
-                    (page 4)
-                  </p>
+                  <img
+                    src="https://lh3.googleusercontent.com/d/155vZjyPMQ7nN8-cEQT7Wr8w-_SmCuKCV"
+                  />
                 </div>
               </div>
 
@@ -1008,17 +958,9 @@
                   class="img-placeholder"
                   style="min-height: 120px; padding: 1.5rem"
                 >
-                  <div class="img-placeholder-icon" style="font-size: 1.25rem">
-                    📸
-                  </div>
-                  <p class="img-placeholder-label">
-                    Screenshot: Helm deploy output in pipeline log
-                  </p>
-                  <p class="img-placeholder-hint">
-                    Replace with: Terminal output screenshot showing "NAME:
-                    dpp-feature-access-rights … STATUS: deployed … URL:
-                    https://feature-access-rights.20.215.88.132.nip.io" (page 5)
-                  </p>
+                  <img
+                    src="https://lh3.googleusercontent.com/d/16BbvE4qr0pTNfPRk0YLMIPtwLPLGD5Af"
+                  />
                 </div>
               </div>
 
@@ -1044,16 +986,9 @@
                   class="img-placeholder"
                   style="min-height: 160px; padding: 1.5rem"
                 >
-                  <div class="img-placeholder-icon" style="font-size: 1.25rem">
-                    📸
-                  </div>
-                  <p class="img-placeholder-label">
-                    Screenshot: Live preview environment in browser
-                  </p>
-                  <p class="img-placeholder-hint">
-                    Replace with: Browser screenshot of the live DPP Admin panel
-                    at the feature URL (page 5)
-                  </p>
+                  <img
+                    src="https://lh3.googleusercontent.com/d/1aRqscw77WowA_CukRgAOrRf7YRDJQrsB"
+                  />
                 </div>
               </div>
 
@@ -1078,16 +1013,13 @@
                   class="img-placeholder"
                   style="min-height: 100px; padding: 1.5rem"
                 >
-                  <div class="img-placeholder-icon" style="font-size: 1.25rem">
-                    📸
-                  </div>
-                  <p class="img-placeholder-label">
-                    Screenshot: Namespace deleted + 404 confirmation
-                  </p>
-                  <p class="img-placeholder-hint">
-                    Replace with: Terminal output "release uninstalled /
-                    namespace deleted" + browser 404 screenshot (page 6)
-                  </p>
+                  <img
+                    src="https://lh3.googleusercontent.com/d/1DPp-ZLgfpLAGRaYZJfHu60MUy_4BNLlh"
+                    style="padding-bottom: 50px"
+                  />
+                  <img
+                    src="https://lh3.googleusercontent.com/d/1OpWpX6Fxb_lu2JqmAio5P_YZZnoG227Z"
+                  />
                 </div>
               </div>
             </div>
